@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import datetime
 from matplotlib import pyplot as plt
 from matplotlib import cm
 import matplotlib as mpl
@@ -13,6 +13,9 @@ sns.set_style("darkgrid")
 import numpy as np
 import json
 import argparse
+
+axlabels = {"TFLOPS": "Compute performance (TFLOP/s)", "TFLOPS/J": "Energy efficiency (TFLOP/J)"}
+clocks = []
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -33,6 +36,14 @@ def read_data(filename=None):
     all_data = list(data["cache"].values())
 
     print(f"Read {len(all_data)} items")
+
+    clocks.extend(data['tune_params']['nvml_gr_clock'])
+
+    # compute how long the experiment took and print
+    start_time = datetime.datetime.fromisoformat(all_data[0]['timestamp'])
+    end_time = datetime.datetime.fromisoformat(all_data[-1]['timestamp'])
+    total_time = end_time - start_time
+    print(f"Collecting this data on the GPU took {total_time.total_seconds()} seconds.")
 
     return all_data
 
@@ -57,7 +68,7 @@ def get_plot():
 
 def scatter_plot(metric1, metric2, color_by, title=None, data=None, pareto_front=None, output_file=None):
     f, ax = get_plot()
-    scatter(f, ax, metric1, metric2, color_by, title=title, data=data, pareto_front=pareto_front)
+    scatter(f, ax, metric1, metric2, color_by, title=title, data=data, pareto_front=pareto_front, output_file=output_file)
 
 
 def scatter(f, ax, metric1, metric2, color_by, title=None, data=None, pareto_front=None, output_file=None):
@@ -67,8 +78,9 @@ def scatter(f, ax, metric1, metric2, color_by, title=None, data=None, pareto_fro
 
     s = ( mpl.rcParams['lines.markersize']**2 ) / 2
 
-    ax.set_xlabel(metric2)
-    ax.set_ylabel(metric1)
+
+    ax.set_xlabel(axlabels[metric2] if metric2 in axlabels else metric2)
+    ax.set_ylabel(axlabels[metric1] if metric1 in axlabels else metric1)
     if title:
         ax.set_title(title)
 
@@ -80,7 +92,7 @@ def scatter(f, ax, metric1, metric2, color_by, title=None, data=None, pareto_fro
 
     dots = ax.scatter(x, y, c=colors, cmap=cm.viridis, s=s, alpha=0.5, linewidth=0.1, edgecolor="#757575", label="measurements")
 
-    handles, labels = dots.legend_elements(prop="colors")
+    handles, labels = dots.legend_elements(prop="colors", num=clocks)
     labels = [label + " MHz" for label in labels]
 
     if pareto_front:
@@ -148,7 +160,7 @@ def print_pareto_front(pareto_front, keys=None):
         if val == int(val):
             return str(val)
         else:
-            return "%.2f" % round(val,2)
+            return f'{val:.4}'
     if not keys:
         keys = pareto_front[0].keys()
     print(" & ".join([k for k in keys]) + " \\\\")
