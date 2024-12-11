@@ -31,8 +31,9 @@ The data used in the paper is not (yet) present in this repository. To retrieve 
 To reproduce the paper results from both SSD experiments, the following commands should be used:
 
 ```bash
-./run_fio_randread_request_size.sh <NVME DRIVE TO WIPE>
 ./run_fio_gc.sh <NVME DRIVE TO WIPE>
+# The order is important as the read experiment relies on a fully-written SSD.
+./run_fio_randread_request_size.sh <NVME DRIVE TO WIPE>
 ```
 
 ## Running the analysis and reproducing the plots
