@@ -38,7 +38,11 @@ def read_data(filename=None):
 
     print(f"Read {len(all_data)} items")
 
-    clocks.extend(data['tune_params']['nvml_gr_clock'])
+    if 'nvml_gr_clock' in data['tune_params'].keys():
+        clocks.extend(data['tune_params']['nvml_gr_clock'])
+
+    if 'tegra_gr_clock' in data['tune_params'].keys():
+        clocks.extend(data['tune_params']['tegra_gr_clock'])
 
     # compute how long the experiment took and print
     start_time = datetime.datetime.fromisoformat(all_data[0]['timestamp'])
@@ -93,7 +97,13 @@ def scatter(f, ax, metric1, metric2, color_by, title=None, data=None, pareto_fro
 
     dots = ax.scatter(x, y, c=colors, cmap=cm.viridis, s=s, alpha=0.5, linewidth=0.1, edgecolor="#757575", label="measurements")
 
-    handles, labels = dots.legend_elements(prop="colors", num=clocks)
+    handles, labels = dots.legend_elements(prop="colors", num=clocks, fmt="{x}")
+    if int(labels[0]) > 1000000:
+        # Tegra specifies clocks in Hz not MHz, so convert to MHz
+        labels = [int(label)/1e6 for label in labels]
+        labels = [int(round(label,0)) for label in labels]
+        labels = [str(label) for label in labels]
+
     labels = [label + " MHz" for label in labels]
 
     if pareto_front:
