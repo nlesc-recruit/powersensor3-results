@@ -17,15 +17,17 @@ To reproduce the analysis and plots from the paper from the (pre-)collected data
 
 ## How to reproduce
 
-The sensor data used in the paper is already contained in this repository. Unzip the data in the .\current_sweep_data to .\current_sweep_data 
-The plot_current_sweep.py script can be used to plot the collected sensor data. It also produces the plots in the paper, for example using:
+The sensor data used in the paper is already contained in this repository. Unzip the data in ./current_sweep_data to ./current_sweep_data and ./step_data to ./step_data. The plot_current_sweep.py script can be used to plot the collected sensor data for different loads. It also produces the plot used in the paper, for example, by using:
 ```bash
-python plot_current_sweep.py
-
+python3 plot_current_sweep.py
+```
+The plot_load_step.py script can be used to plot the collected load step data. It also produces the plot in the paper, for example, by using:
+```bash
+python3 plot_load_step.py
 ```
 
 ### Re-collecting the data
 
-A detailed description of the measruements can be found here: https://git.astron.nl/RD/powersensor3/-/tree/main/Measurements?ref_type=heads
+A detailed description of the measruements can be found here: https://git.astron.nl/RD/powersensor3/-/tree/main/Measurements
 
 
