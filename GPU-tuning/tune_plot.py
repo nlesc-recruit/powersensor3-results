@@ -33,6 +33,7 @@ def read_data(filename=None):
     with open(filename, 'r') as fh:
         data = json.loads(fh.read())
 
+    keys = list(data["tune_params"].keys())
     all_data = list(data["cache"].values())
 
     print(f"Read {len(all_data)} items")
@@ -45,7 +46,7 @@ def read_data(filename=None):
     total_time = end_time - start_time
     print(f"Collecting this data on the GPU took {total_time.total_seconds()} seconds.")
 
-    return all_data
+    return keys, all_data
 
 
 def get_plot():
@@ -66,9 +67,9 @@ def get_plot():
     return f, ax
 
 
-def scatter_plot(metric1, metric2, color_by, title=None, data=None, pareto_front=None, output_file=None):
+def scatter_plot(*args, **kwargs):
     f, ax = get_plot()
-    scatter(f, ax, metric1, metric2, color_by, title=title, data=data, pareto_front=pareto_front, output_file=output_file)
+    scatter(f, ax, *args, **kwargs)
 
 
 def scatter(f, ax, metric1, metric2, color_by, title=None, data=None, pareto_front=None, output_file=None):
@@ -172,7 +173,16 @@ def print_pareto_front(pareto_front, keys=None):
 if __name__ == "__main__":
     args = parse_args()
 
-    all_data = read_data(args.cache)
+    keys, all_data = read_data(args.cache)
+    print(keys)
+
+    # key for graphics clock
+    for key in ("nvml_gr_clock", "tegra_gr_clock"):
+        if key in keys:
+            gr_clock = key
+            break
+    else:
+        raise KeyError("No graphics clock key found in cache")
 
     # Compute pareto front
     pareto_front = None
@@ -181,11 +191,11 @@ if __name__ == "__main__":
 
     metric1 = "TFLOPS"
     metric2 = "TFLOPS/J"
-    color_by = "nvml_gr_clock"
+    color_by = gr_clock
     scatter_plot(metric1, metric2, color_by, title=args.title, data=all_data, pareto_front=pareto_front, output_file=args.output)
 
     if args.pareto:
         # Print values on the pareto front
-        keys = ['nvml_gr_clock', 'block_size_x', 'block_size_y', 'block_size_z', 'M_PER_BLOCK', 'N_PER_BLOCK', 'NBUFFER', 'N_PER_WARP', 'M_PER_WARP', 'TFLOPS', 'TFLOPS/J']
+        keys = [gr_clock, 'block_size_x', 'block_size_y', 'block_size_z', 'M_PER_BLOCK', 'N_PER_BLOCK', 'NBUFFER', 'N_PER_WARP', 'M_PER_WARP', 'TFLOPS', 'TFLOPS/J']
         print_pareto_front(pareto_front, keys)
 

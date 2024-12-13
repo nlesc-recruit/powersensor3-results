@@ -6,6 +6,7 @@ import kernel_tuner as kt
 from kernel_tuner.observers.nvml import NVMLObserver
 from kernel_tuner.observers.pmt import PMTObserver
 from kernel_tuner.observers.powersensor import PowerSensorObserver
+from kernel_tuner.observers.tegra import TegraObserver, get_tegra_gr_clocks
 import numpy as np
 import os
 
@@ -37,6 +38,7 @@ def parse_args():
     parser.add_argument(
         "--freq", type=lambda s: [int(item) for item in s.split(',')], help="Tune specified clock frequencies"
     )
+    parser.add_argument("--tegra", action="store_true", help="Tuning runs on a Tegra device")
     parser.add_argument(
         "-f",
         dest="overwrite",
@@ -185,12 +187,23 @@ if __name__ == '__main__':
         metrics.update(get_ncu_metrics())
 
     if args.freq:
-        nvmlobserver = NVMLObserver(["core_freq", "temperature"], nvidia_smi_fallback="/cm/shared/package/utils/bin/nvidia-smi-fallback")
-        observers.append(nvmlobserver)
-        tune_params["nvml_gr_clock"] = args.freq
-        tune_params = OrderedDict(tune_params)
-        tune_params.move_to_end("nvml_gr_clock", last=False)  # Moves key nvml_gr_clock to the front
-
+        tegra_observer = TegraObserver(observables=["core_freq", "tegra_temp", "tegra_power", "tegra_energy"])
+        observers.append(tegra_observer)
+        tegra_available_gr_clocks = get_tegra_gr_clocks(quiet=True)["tegra_gr_clock"][1:]  # can't set lowest clock?
+        if args.tegra:
+            if args.freq == [0]:
+                tune_freqs = tegra_available_gr_clocks
+            else:
+                tune_freqs = [freq for freq in args.freq if freq in tegra_available_gr_clocks]
+            tune_params["tegra_gr_clock"] = tune_freqs
+            tune_params = OrderedDict(tune_params)
+            tune_params.move_to_end("tegra_gr_clock", last=False)  # Moves key tegra_gr_clock to the front
+        else:
+            nvmlobserver = NVMLObserver(["core_freq", "temperature"], nvidia_smi_fallback="/cm/shared/package/utils/bin/nvidia-smi-fallback")
+            observers.append(nvmlobserver)
+            tune_params["nvml_gr_clock"] = args.freq
+            tune_params = OrderedDict(tune_params)
+            tune_params.move_to_end("nvml_gr_clock", last=False)  # Moves key nvml_gr_clock to the front
 
 
     with open(f"{ccglib_dir}/kernels/{kernel_file}", "r") as fp:

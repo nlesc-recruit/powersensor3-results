@@ -30,11 +30,18 @@ This scipt requires the PowerSensor3 hardware to be installed into the machine.
 This also requires a GPU with root privileges to control clock frequencies.
 Collecting this data takes several hours and produces a file named AD4000_wmma_complex_gemm_opt_16bit_1x4096x4096x4096.json. This file is already part of this repository.
 
+For a Jetson AGX Orin, the procedure is similar:
+```
+python tune_gemm.py --name Orin --nbit 16 -b 1 -m 4096 -n 4096 -k 4096 --backend cupy --observer powersensor --ccglib /home/bwn200/ccglib --freq 0 --tegra
+```
+The `--freq 0` settings automatically runs over all available frequencies. The resulting file Orin_wmma_complex_gemm_opt_16bit_1x4096x4096x4096.json is also available in this repository.
+
 ### Running the analysis and reproducing the plots
 
 The tune_plot.py script can be used to process the collected performance data. It also produces the plots in the paper, for example using:
 ```bash
-python tune_plot.py --cache AD4000_wmma_complex_gemm_opt_16bit_1x4096x4096x4096.json --title "TensorCore Beamformer 16-bit 4kx4kx4k on RTX Ada 4000" --output beamformer.pdf --pareto
+python tune_plot.py --cache AD4000_wmma_complex_gemm_opt_16bit_1x4096x4096x4096.json --title "Tensor-Core Beamformer 16-bit 4kx4kx4k on RTX 4000 Ada" --output beamformer_ad4000.pdf --pareto
+python tune_plot.py --cache Orin_wmma_complex_gemm_opt_16bit_1x4096x4096x4096.json --title "Tensor-Core Beamformer 16-bit 4kx4kx4k on Jetson AGX Orin" --output beamformer_orin.pdf --pareto
 ```
 The --pareto switch can be used to highlight the pareto front in the plot. It also prints the Latex code for the table.
 
