@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib import cm
 import matplotlib as mpl
 
-mpl.rcParams.update({'font.size': 16})
+mpl.rcParams.update({'font.size': 20})
 
 import seaborn as sns
 
