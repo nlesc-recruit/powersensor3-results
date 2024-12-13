@@ -32,17 +32,17 @@ def plot_step(power):
     plt.rcParams['figure.figsize'] = [15, 7]
     fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    start_point_1 = 35
-    points = 150
+    start_point_1 = 120
+    points = 350
     time_ms = [start_point_1*50e-3 + cnt * 50e-3 for cnt in range(points)]
     for power in powers:
         ax1.plot(time_ms, power[start_point_1:start_point_1+points], label="Max.")
     ax1.set(xlabel=f"Time (ms)" , ylabel="Power (W)")
     ax1.set_position([0, 0, 0.50, 0.9])
-    ax1.set_ylim(ymin=0, ymax=15)
-    ax1.set_xlim(2, 9)
+    ax1.set_ylim(ymin=40, ymax=100)
+    ax1.set_xlim(6, 15)
 
-    start_point_2 = start_point_1+15
+    start_point_2 = start_point_1+30
     points = 22
     time_ms = [start_point_2*50 + cnt * 50 for cnt in range(points)]
     for power in powers:
@@ -50,8 +50,8 @@ def plot_step(power):
     ax2.set(xlabel=f"Time ($\mu $s)" , ylabel="Power (W)")
     ax2.grid(True)
     ax2.set_position([0.6, 0, 0.25, 0.90])
-    ax2.set_ylim(ymin=0, ymax=15)
-    ax2.set_xlim(2500, 3500)
+    ax2.set_ylim(ymin=40, ymax=100)
+    ax2.set_xlim(7500, 8500)
     fig.suptitle("PowerSensor3 step response", y=1)
     fig.savefig("step.pdf", bbox_inches = 'tight')
     fig.show()
