@@ -26,7 +26,7 @@ def read_datafile(file_name, sensor):
     return volt, current, power, time, dtime
 
 
-def plot_step(power):
+def plot_step(powers):
     plt.figure()
     plt.rcParams.update({'font.size': 20})
     plt.rcParams['figure.figsize'] = [15, 7]
@@ -58,9 +58,9 @@ def plot_step(power):
 
 
 def main():
-    file_location = './step_data'
+    file_location = './step_data/'
     sensors = [2]
-    process_files = ['step_100Hz_90pr_1A.csv']
+    process_files = ['step_100Hz_80pr_8A.csv']
     voltages=[]
     currents=[]
     cur_max=[]
@@ -89,4 +89,7 @@ def main():
             powers_mean.append(np.mean(power))
             pwr_max.append(np.max(power))
             pwr_min.append(np.min(power))
-    plot_step(power)
+    plot_step(powers)
+    
+if __name__ == "__main__":
+    main()
