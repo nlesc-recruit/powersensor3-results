@@ -22,9 +22,14 @@ To reproduce the analysis and plots from the paper, the following is required:
 
 ## How to reproduce
 
-The data used in the paper is not (yet) present in this repository. To retrieve the data and reproduce the plots, the fio scripts will have to be run. The data used in the paper will be published on Zenodo soon.
+To reproduce the PowerSensor3 results, you can either download the data of our runs, or you can rerun the benchmarks manually.
 
-## Re-collecting the data
+### Download data
+
+The results of our benchmarking are publically available on <https://zenodo.org/records/15019311>.
+When using these results, please follow the instructions on Zenodo.  
+
+### Re-collecting the data
 
 > **WARNING**: The fio experiments wipe ALL data present on the NVMe drive. Do not run it on an SSD that has important data.
 
