@@ -1,0 +1,32 @@
+# YAML 1.2
+---
+cff-version: 1.2.0
+title: "powersensor3-results"
+authors:
+  -
+    family-names: Vlugt
+    name-particle: "van der"
+    given-names: Steven
+  -
+    family-names: Oostrum
+    given-names: Leon
+  -
+    family-names: Schoonderbeek
+    given-names: Gijs
+  -
+    family-names: Werkhoven
+    name-particle: van
+    given-names: Ben
+  -
+    family-names: Veenboer
+    given-names: Bram
+  -
+    family-names: Doekemeijer
+    given-names: Krijn
+  -
+    family-names: Romein
+    given-names: John
+
+repository-code: "https://github.com/nlesc-recruit/powersensor3-results"
+message: "If you use these results, please cite them using these metadata."
+license: Apache-2.0
