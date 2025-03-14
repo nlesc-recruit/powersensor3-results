@@ -27,6 +27,7 @@ authors:
     family-names: Romein
     given-names: John
 
+version: "1.0.0"
 repository-code: "https://github.com/nlesc-recruit/powersensor3-results"
 message: "If you use these results, please cite them using these metadata."
 license: Apache-2.0
