@@ -1,31 +1,43 @@
 # YAML 1.2
 ---
 cff-version: 1.2.0
-title: "powersensor3-results"
+title: "PowerSensor3 Results"
 authors:
   -
-    family-names: Vlugt
-    name-particle: "van der"
+    family-names: van der Vlugt
     given-names: Steven
+    affiliation: Netherlands Institute for Radio Astronomy
+    orcid: "https://orcid.org/0000-0001-6834-4860"
   -
     family-names: Oostrum
     given-names: Leon
+    affiliation: Netherlands eScience Center
+    orcid: "https://orcid.org/0000-0001-8724-8372"
   -
     family-names: Schoonderbeek
     given-names: Gijs
+    affiliation: Netherlands Institute for Radio Astronomy
+    orcid: "https://orcid.org/0000-0001-9482-1253"
   -
-    family-names: Werkhoven
-    name-particle: van
+    family-names: van Werkhoven
     given-names: Ben
+    affiliation: Netherlands eScience Center, Leiden University
+    orcid: "https://orcid.org/0000-0002-7508-3272"
   -
     family-names: Veenboer
     given-names: Bram
+    affiliation: Netherlands Institute for Radio Astronomy
+    orcid: "https://orcid.org/0000-0001-9607-1142"
   -
     family-names: Doekemeijer
     given-names: Krijn
+    affiliation: Vrije Universiteit Amsterdam
+    orcid: "https://orcid.org/0009-0007-7530-4438"
   -
     family-names: Romein
-    given-names: John
+    given-names: John W.
+    affiliation: Netherlands Institute for Radio Astronomy
+    orcid: "https://orcid.org/0000-0002-1915-5067"
 
 version: "1.0.0"
 keywords:
